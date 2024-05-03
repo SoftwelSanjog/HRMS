@@ -54,7 +54,7 @@ namespace HRMS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BankCode,BankName,AccountNumber,CreatedById,CreatedOn,ModifiedById,ModifiedOn")] Bank bank)
+        public async Task<IActionResult> Create([Bind("Id,BankCode,BankName,Branch,CreatedById,CreatedOn,ModifiedById,ModifiedOn")] Bank bank)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace HRMS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BankCode,BankName,AccountNumber,CreatedById,CreatedOn,ModifiedById,ModifiedOn")] Bank bank)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BankCode,BankName,Branch,CreatedById,CreatedOn,ModifiedById,ModifiedOn")] Bank bank)
         {
             if (id != bank.Id)
             {

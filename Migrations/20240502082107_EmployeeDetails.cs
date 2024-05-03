@@ -74,7 +74,7 @@ namespace HRMS.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Employees", x => x.Id);
+                    table.PrimaryKey("PK_Employees", x => x.EmpId);
                 });
 
             migrationBuilder.CreateTable(

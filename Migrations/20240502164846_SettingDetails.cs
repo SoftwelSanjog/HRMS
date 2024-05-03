@@ -41,7 +41,7 @@ namespace HRMS.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false),
                     BankCode = table.Column<string>(type: "text", nullable: false),
                     BankName = table.Column<string>(type: "text", nullable: false),
-                    AccountNumber = table.Column<string>(type: "text", nullable: false),
+                    Branch = table.Column<string>(type: "text", nullable: false),
                     CreatedById = table.Column<string>(type: "text", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     ModifiedById = table.Column<string>(type: "text", nullable: true),

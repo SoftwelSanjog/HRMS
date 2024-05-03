@@ -1,8 +1,12 @@
-﻿namespace HRMS.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace HRMS.Models
 {
     public class Employee : UserActivity
     {
+        
         public int Id { get; set; }
+        [Key]
         public string EmpId { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
