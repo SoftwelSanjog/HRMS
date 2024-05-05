@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using HRMS.Data;
+﻿using HRMS.Data;
 using HRMS.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace HRMS.Controllers
 {
@@ -58,8 +54,11 @@ namespace HRMS.Controllers
         {
             if (ModelState.IsValid)
             {
+                var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                leaveType.CreatedById = UserId;
+                leaveType.CreatedOn = DateTime.Now;
                 _context.Add(leaveType);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(UserId);
                 return RedirectToAction(nameof(Index));
             }
             return View(leaveType);
@@ -97,8 +96,14 @@ namespace HRMS.Controllers
             {
                 try
                 {
-                    _context.Update(leaveType);
-                    await _context.SaveChangesAsync();
+                    //get old value
+                    var oldleavetype = await _context.LeaveTypes.FindAsync(id);
+                    var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    leaveType.ModifiedById = UserId;
+                    leaveType.ModifiedOn = DateTime.Now;
+                    //_context.Update(leaveType);
+                    _context.Entry(oldleavetype).CurrentValues.SetValues(leaveType);
+                    await _context.SaveChangesAsync(UserId);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -144,8 +149,8 @@ namespace HRMS.Controllers
             {
                 _context.LeaveTypes.Remove(leaveType);
             }
-
-            await _context.SaveChangesAsync();
+            var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _context.SaveChangesAsync(UserId);
             return RedirectToAction(nameof(Index));
         }
 

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using HRMS.Data;
+﻿using HRMS.Data;
 using HRMS.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HRMS.Controllers
 {
@@ -63,7 +58,7 @@ namespace HRMS.Controllers
 
             if (ModelState.IsValid)
             {
-               
+
                 _context.Add(employee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -79,12 +74,14 @@ namespace HRMS.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employees.FindAsync(id);
+            //var employee = await _context.Employees.FindAsync(id);
+            var employee = _context.Employees.Where(x => x.Id == id).FirstOrDefault();
             if (employee == null)
             {
                 return NotFound();
             }
             return View(employee);
+
         }
 
         // POST: Employees/Edit/5
@@ -92,7 +89,7 @@ namespace HRMS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,EmpId,FirstName,MiddleName,LastName,PhoneNumber,EmailAddress,Country,Address,DateOfBirth,Cluster,Designation,CreatedById,CreatedOn,ModifiedById,ModifiedOn")] Employee employee)
+        public async Task<IActionResult> Edit(int id, Employee employee)
         {
             if (id != employee.Id)
             {
