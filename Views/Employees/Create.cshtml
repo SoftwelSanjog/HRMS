@@ -59,8 +59,8 @@
                 <div class="col-md-6">
 
                     <div class="form-group">
-                        <label asp-for="Country" class="control-label"></label>
-                        <input asp-for="Country" class="form-control" />
+                        <label asp-for="CountryId" class="control-label"></label>
+                        <select asp-for="CountryId" class="form-control" asp-items="ViewBag.CountryId"/>
                         <span asp-validation-for="Country" class="text-danger"></span>
                     </div>
                 </div>
@@ -83,38 +83,53 @@
                 <div class="col-md-6">
 
                     <div class="form-group">
-                        <label asp-for="Cluster" class="control-label"></label>
-                        <input asp-for="Cluster" class="form-control" />
+                        <label asp-for="ClusterId" class="control-label"></label>
+                        <select asp-for="ClusterId" class="form-control" asp-items="ViewBag.ClusterId" />
                         <span asp-validation-for="Cluster" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
 
                     <div class="form-group">
-                        <label asp-for="Designation" class="control-label"></label>
-                        <input asp-for="Designation" class="form-control" />
+                        <label asp-for="DesignationId" class="control-label"></label>
+                        <select asp-for="DesignationId" class="form-control" asp-items="ViewBag.DesignationId" />
                         <span asp-validation-for="Designation" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="BankAccountNumber" class="control-label"></label>
-                    <input asp-for="BankAccountNumber" class="form-control" />
-                    <span asp-validation-for="BankAccountNumber" class="text-danger"></span>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="BankAccountNumber" class="control-label"></label>
+                        <input asp-for="BankAccountNumber" class="form-control" />
+                        <span asp-validation-for="BankAccountNumber" class="text-danger"></span>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="JoinDate" class="control-label"></label>
-                    <input asp-for="JoinDate" class="form-control" />
-                    <span asp-validation-for="JoinDate" class="text-danger"></span>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="BankId" class="control-label"></label>
+                        <select asp-for="BankId" class="form-control" asp-items="ViewBag.BankId" />
+                        <span asp-validation-for="BankAccountNumber" class="text-danger"></span>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="ContractEndDate" class="control-label"></label>
-                    <input asp-for="ContractEndDate" class="form-control" />
-                    <span asp-validation-for="ContractEndDate" class="text-danger"></span>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="JoinDate" class="control-label"></label>
+                        <input asp-for="JoinDate" class="form-control" />
+                        <span asp-validation-for="JoinDate" class="text-danger"></span>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="ProfilePictureURL" class="control-label"></label>
-                    <input asp-for="ProfilePictureURL" class="form-control" />
-                    <span asp-validation-for="ProfilePictureURL" class="text-danger"></span>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="ContractEndDate" class="control-label"></label>
+                        <input asp-for="ContractEndDate" class="form-control" />
+                        <span asp-validation-for="ContractEndDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="ProfilePictureURL" class="control-label"></label>
+                        <input asp-for="ProfilePictureURL" class="form-control" />
+                        <span asp-validation-for="ProfilePictureURL" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
             <div class="form-group">

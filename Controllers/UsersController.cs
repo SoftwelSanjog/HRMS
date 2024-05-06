@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing.Imaging;
 
 namespace HRMS.Controllers
 {
@@ -56,6 +57,10 @@ namespace HRMS.Controllers
             user.CreatedOn = DateTime.Now;
             user.CreatedById = "Sanjog";
             user.RoleId = model.RoleId;
+
+            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Name",model.RoleId);
+            var rolemodel = await _context.Roles.FirstOrDefaultAsync(x=>x.Id == model.RoleId);
+            user.Role = rolemodel;
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {

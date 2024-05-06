@@ -310,8 +310,11 @@ namespace HRMS.Migrations
 
             modelBuilder.Entity("HRMS.Models.Employee", b =>
                 {
-                    b.Property<string>("EmpId")
-                        .HasColumnType("text");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -321,16 +324,17 @@ namespace HRMS.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Cluster")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("BankId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ClusterId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("ContractEndDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("CountryId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("CreatedById")
                         .HasColumnType("text");
@@ -341,11 +345,14 @@ namespace HRMS.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Designation")
+                    b.Property<int>("DesignationId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("EmailAddress")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("EmailAddress")
+                    b.Property<string>("EmpId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -353,7 +360,7 @@ namespace HRMS.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Id")
+                    b.Property<int?>("GenderId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("JoinDate")
@@ -380,7 +387,17 @@ namespace HRMS.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("EmpId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("BankId");
+
+                    b.HasIndex("ClusterId");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("DesignationId");
+
+                    b.HasIndex("GenderId");
 
                     b.ToTable("Employees");
                 });
@@ -419,10 +436,6 @@ namespace HRMS.Migrations
                     b.Property<int>("DurationId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("EmployeeEmpId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int>("EmployeeId")
                         .HasColumnType("integer");
 
@@ -451,7 +464,7 @@ namespace HRMS.Migrations
 
                     b.HasIndex("DurationId");
 
-                    b.HasIndex("EmployeeEmpId");
+                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("LeaveTypeId");
 
@@ -785,6 +798,48 @@ namespace HRMS.Migrations
                     b.Navigation("Country");
                 });
 
+            modelBuilder.Entity("HRMS.Models.Employee", b =>
+                {
+                    b.HasOne("HRMS.Models.Bank", "Bank")
+                        .WithMany()
+                        .HasForeignKey("BankId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HRMS.Models.Cluster", "Cluster")
+                        .WithMany()
+                        .HasForeignKey("ClusterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HRMS.Models.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HRMS.Models.Designation", "Designation")
+                        .WithMany()
+                        .HasForeignKey("DesignationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HRMS.Models.SystemCodeDetail", "Gender")
+                        .WithMany()
+                        .HasForeignKey("GenderId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Bank");
+
+                    b.Navigation("Cluster");
+
+                    b.Navigation("Country");
+
+                    b.Navigation("Designation");
+
+                    b.Navigation("Gender");
+                });
+
             modelBuilder.Entity("HRMS.Models.LeaveApplication", b =>
                 {
                     b.HasOne("HRMS.Models.SystemCodeDetail", "Duration")
@@ -795,7 +850,7 @@ namespace HRMS.Migrations
 
                     b.HasOne("HRMS.Models.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("EmployeeEmpId")
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -853,7 +908,7 @@ namespace HRMS.Migrations
             modelBuilder.Entity("HRMS.Models.SystemProfile", b =>
                 {
                     b.HasOne("HRMS.Models.SystemProfile", "Profile")
-                        .WithMany("Childern")
+                        .WithMany("Children")
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Restrict);
 
@@ -913,7 +968,7 @@ namespace HRMS.Migrations
 
             modelBuilder.Entity("HRMS.Models.SystemProfile", b =>
                 {
-                    b.Navigation("Childern");
+                    b.Navigation("Children");
                 });
 #pragma warning restore 612, 618
         }

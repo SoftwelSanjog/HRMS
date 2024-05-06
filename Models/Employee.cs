@@ -5,10 +5,9 @@ namespace HRMS.Models
 {
     public class Employee : UserActivity
     {
-
-        public int Id { get; set; }
         [Key]
-        [DisplayName("Employee ID")]
+        public int Id { get; set; } 
+        [DisplayName("Employee ID")]     
         public string EmpId { get; set; }
         [DisplayName("First Name")]
         public string FirstName { get; set; }
@@ -22,22 +21,32 @@ namespace HRMS.Models
         [DisplayName("Email Address")]
         public string EmailAddress { get; set; }
         [DisplayName("Country")]
-        public string Country { get; set; }
+        public int CountryId { get; set; }
+        public Country Country { get; set; }
         [DisplayName("Address")]
         public string Address { get; set; }
         [DisplayName("Date of Birth")]
         public DateTime DateOfBirth { get; set; }
-        public string Cluster { get; set; }
-        public string Designation { get; set; }
+        [DisplayName("Cluster")]
+        public int ClusterId { get; set; }
+        public Cluster Cluster { get; set; }
+        [DisplayName("Designation")]
+        public int DesignationId { get; set; }
+        public Designation Designation { get; set; }
+
         [DisplayName("Bank Account Number")]
         public string BankAccountNumber { get; set; }
-        //public int BankId { get; set; }
-        //public Bank Bank { get; set; }
+        public int BankId { get; set; }
+        public Bank Bank { get; set; }
         [DisplayName("Join Date")]
         public DateTime JoinDate { get; set; }
         [DisplayName("Contract End Date")]
         public DateTime ContractEndDate { get; set; }
 
         public string ProfilePictureURL { get; set; }
+        [DisplayName("Gender")]
+        public int? GenderId { get; set; }
+        public SystemCodeDetail Gender {  get; set; }
+
     }
 }

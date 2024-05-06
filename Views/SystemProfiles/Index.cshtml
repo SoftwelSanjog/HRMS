@@ -49,7 +49,9 @@
                             @Html.DisplayFor(modelItem => item.Name)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Profile.Name)
+                            @if(item.Profile != null){
+                            @Html.DisplayFor(modelItem => item.Profile.Name) 
+                            }
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Order)

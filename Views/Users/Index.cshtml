@@ -6,7 +6,7 @@
 }
 
 <p>
-    <a class="btn btn-primary" asp-asp-controller="LeaveApplications" asp-action="Create"><i class="fa fa-plus"></i> Add New User</a>
+    <a class="btn btn-primary" asp-asp-controller="Users" asp-action="Create"><i class="fa fa-plus"></i> Add New User</a>
 </p>
 <div class="card">
     <div class="card-header">
@@ -18,22 +18,19 @@
             <thead>
                 <tr>
                     <th>
-                       User ID
-                    </th>
-                    <th>
                         Full Name
                     </th>
                     <th>
                         Role
                     </th>
                     <th>
-                       User Name
+                        User Name
                     </th>
                     <th>
-                       Email
+                        Email
                     </th>
                     <th>
-                       Phone Number
+                        Phone Number
                     </th>
                     <th></th>
                 </tr>
@@ -42,11 +39,11 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                           <td>
+                        <td>
                             @Html.DisplayFor(modelItem => item.FullName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Role.Name)
+                                @Html.DisplayFor(modelItem => item.Role.Name) 
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.UserName)
@@ -57,7 +54,7 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.PhoneNumber)
                         </td>
-                               <td>
+                        <td>
                             <div class="input-group input-group-lg">
                                 <div class="input-group-prepend">
                                     <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">

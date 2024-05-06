@@ -41,7 +41,7 @@
                             <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary"><i class="fas fa-pencil-alt"></i> Edit</a>
                         </td>
                         <td style="text-align: center; vertical-align:middle">
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
+                            <a asp-action="UserRights" asp-controller="Profiles" asp-route-id="@item.Id" class="btn btn-danger"><i class="fa fa-lock"></i> Assign Rights</a>
                         </td>
                     </tr>
                 }
