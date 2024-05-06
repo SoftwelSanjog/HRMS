@@ -37,10 +37,10 @@
                         @Html.DisplayNameFor(model => model.Address)
                     </th>
                         <th>
-                        @Html.DisplayNameFor(model => model.Cluster)
+                        @Html.DisplayNameFor(model => model.ClusterId)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Designation)
+                        @Html.DisplayNameFor(model => model.DesignationId)
                     </th>
                     <th>Edit</th>
                     <th>View</th>
@@ -73,10 +73,10 @@
                             @Html.DisplayFor(modelItem => item.Address)
                         </td>
                             <td>
-                            @Html.DisplayFor(modelItem => item.Cluster)
+                            @Html.DisplayFor(modelItem => item.Cluster.ClusterName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Designation)
+                            @Html.DisplayFor(modelItem => item.Designation.Name)
                         </td>
                         <td>
                             <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary"><i class="fas fa-pencil-alt"></i>Edit</a>

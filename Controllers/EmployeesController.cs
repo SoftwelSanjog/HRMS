@@ -1,7 +1,9 @@
 ﻿using HRMS.Data;
 using HRMS.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace HRMS.Controllers
 {
@@ -17,9 +19,21 @@ namespace HRMS.Controllers
         // GET: Employees
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Employees.ToListAsync());
+            return View(await _context.Employees
+                .Include(c => c.Cluster)
+                .Include(c => c.Bank)
+                .Include(c => c.Designation)
+                .ToListAsync());
         }
 
+        public async Task<IActionResult> EmployeeGrid()
+        {
+            return View(await _context.Employees
+                .Include(c => c.Cluster)
+                .Include(c => c.Bank)
+                .Include(c => c.Designation)
+                .ToListAsync());
+        }
         // GET: Employees/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -41,6 +55,12 @@ namespace HRMS.Controllers
         // GET: Employees/Create
         public IActionResult Create()
         {
+            ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name");
+            ViewData["ClusterId"] = new SelectList(_context.Clusters, "Id", "ClusterName");
+            ViewData["DesignationId"] = new SelectList(_context.Designations, "Id", "Name");
+            ViewData["BankId"] = new SelectList(_context.Banks, "Id", "BankName");
+            ViewData["GenderId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "Gender"), "Id", "Description");
+
             return View();
         }
 
@@ -51,18 +71,25 @@ namespace HRMS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Employee employee)
         {
-            employee.CreatedById = "Sanjog";
+            var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+
+            employee.CreatedById = UserId;
             employee.CreatedOn = DateTime.Now;
-            employee.ModifiedById = "Sanjog";
-            employee.ModifiedOn = DateTime.Now;
+            //if (ModelState.IsValid)
+            //{
 
-            if (ModelState.IsValid)
-            {
+            _context.Add(employee);
+            await _context.SaveChangesAsync(UserId);
+            return RedirectToAction(nameof(Index));
+            //}
 
-                _context.Add(employee);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+            ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name", employee.CountryId);
+            ViewData["ClusterId"] = new SelectList(_context.Clusters, "Id", "ClusterName", employee.ClusterId);
+            ViewData["DesignationId"] = new SelectList(_context.Designations, "Id", "Name", employee.DesignationId);
+            ViewData["BankId"] = new SelectList(_context.Banks, "Id", "BankName", employee.BankId);
+            ViewData["GenderId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "Gender"), "Id", "Description", employee.GenderId);
+
             return View(employee);
         }
 
@@ -80,6 +107,12 @@ namespace HRMS.Controllers
             {
                 return NotFound();
             }
+            ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name", employee.CountryId);
+            ViewData["ClusterId"] = new SelectList(_context.Clusters, "Id", "ClusterName", employee.ClusterId);
+            ViewData["DesignationId"] = new SelectList(_context.Designations, "Id", "Name", employee.DesignationId);
+            ViewData["BankId"] = new SelectList(_context.Banks, "Id", "BankName", employee.BankId);
+            ViewData["GenderId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "Gender"), "Id", "Description", employee.GenderId);
+
             return View(employee);
 
         }
@@ -96,26 +129,35 @@ namespace HRMS.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            //if (ModelState.IsValid)
+            //{
+            try
             {
-                try
-                {
-                    _context.Update(employee);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!EmployeeExists(employee.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                employee.ModifiedById = UserId;
+                employee.ModifiedOn = DateTime.Now;
+                _context.Update(employee);
+                await _context.SaveChangesAsync();
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!EmployeeExists(employee.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+            //}
+            ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name", employee.CountryId);
+            ViewData["ClusterId"] = new SelectList(_context.Clusters, "Id", "ClusterName", employee.ClusterId);
+            ViewData["DesignationId"] = new SelectList(_context.Designations, "Id", "Name", employee.DesignationId);
+            ViewData["BankId"] = new SelectList(_context.Banks, "Id", "BankName", employee.BankId);
+            ViewData["GenderId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "Gender"), "Id", "Description", employee.GenderId);
+
             return View(employee);
         }
 
