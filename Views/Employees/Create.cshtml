@@ -7,7 +7,7 @@
 <hr />
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Create">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -63,6 +63,13 @@
                     </div>
                 </div>
                 <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="CompanyEmail" class="control-label"></label>
+                        <input asp-for="CompanyEmail" class="form-control" />
+                        <span asp-validation-for="CompanyEmail" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
 
                     <div class="form-group">
                         <label asp-for="CountryId" class="control-label"></label>
@@ -77,7 +84,7 @@
                         <span asp-validation-for="Address" class="text-danger"></span>
                     </div>
                 </div>
-               <div class="col-md-6">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="DateOfBirth" class="control-label"></label>
                         <input asp-for="DateOfBirth" class="form-control" />
@@ -127,11 +134,37 @@
                         <span asp-validation-for="ContractEndDate" class="text-danger"></span>
                     </div>
                 </div>
+     
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label asp-for="ProfilePictureURL" class="control-label"></label>
-                        <input asp-for="ProfilePictureURL" class="form-control" />
-                        <span asp-validation-for="ProfilePictureURL" class="text-danger"></span>
+                        <label asp-for="EmployeeStatusId" class="control-label"></label>
+                        <select asp-for="EmployeeStatusId" class="form-control" asp-items="ViewBag.EmployeeStatusId"></select>
+                        <span asp-validation-for="EmployeeStatusId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="ReasonForTerminationId" class="control-label"></label>
+                        <select asp-for="ReasonForTerminationId" class="form-control" asp-items="ViewBag.ReasonForTerminationId"></select>
+                        <span asp-validation-for="ReasonForTerminationId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="EmploymentTermsId" class="control-label"></label>
+                        <select asp-for="EmploymentTermsId" class=" form-control" asp-items="ViewBag.EmploymentTermsId"></select>
+                        <span asp-validation-for="EmploymentTermsId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="ProfilePictureURL" class="control-label"></label>
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input asp-for="ProfilePictureURL" type="file" accept=".png,.jpg,.jpeg" class="custom-file-input employeephoto" id="photo" name="employeephoto">
+                            <label asp-for="ProfilePictureURL" class="custom-file-label">Choose file</label>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -10,20 +10,24 @@ namespace HRMS.Controllers
     public class EmployeesController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public EmployeesController(ApplicationDbContext context)
+        private readonly IConfiguration _configuration;
+        public EmployeesController(IConfiguration configuration, ApplicationDbContext context)
         {
+            _configuration = configuration;
             _context = context;
         }
 
         // GET: Employees
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Employees
+            var model = await _context.Employees
                 .Include(c => c.Cluster)
                 .Include(c => c.Bank)
                 .Include(c => c.Designation)
-                .ToListAsync());
+                .Include(c => c.EmployeeStatus)
+                .ToListAsync();
+
+            return View(model);
         }
 
         public async Task<IActionResult> EmployeeGrid()
@@ -60,6 +64,9 @@ namespace HRMS.Controllers
             ViewData["DesignationId"] = new SelectList(_context.Designations, "Id", "Name");
             ViewData["BankId"] = new SelectList(_context.Banks, "Id", "BankName");
             ViewData["GenderId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "Gender"), "Id", "Description");
+            ViewData["ReasonForTerminationId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "ReasonForTermination"), "Id", "Description");
+            ViewData["EmploymentTermsId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "EmploymentTerms"), "Id", "Description");
+            ViewData["EmployeeStatusId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "EmployeeStatus"), "Id", "Description");
 
             return View();
         }
@@ -69,13 +76,25 @@ namespace HRMS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Employee employee)
+        public async Task<IActionResult> Create(Employee employee, IFormFile employeephoto)
         {
+            if (employeephoto != null)
+            {
+                var filename = $"{employee.EmpId}_{DateTime.Now.ToString("yyyyMMddHHmmss")}{GetFileExtension(employeephoto.ContentType)}";
+                var path = _configuration["FileSettings:UploadFolder"]!;
+                var filepath = Path.Combine(path, filename);
+                var stream = new FileStream(filepath, FileMode.Create);
+                await employeephoto.CopyToAsync(stream);
+                employee.ProfilePictureURL = filepath;
+            }
+
+            var statusId = await _context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "EmployeeStatus" && x.Code == "Active").FirstOrDefaultAsync();
+
             var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-
             employee.CreatedById = UserId;
             employee.CreatedOn = DateTime.Now;
+            employee.EmployeeStatusId = statusId.Id;
+
             //if (ModelState.IsValid)
             //{
 
@@ -89,6 +108,9 @@ namespace HRMS.Controllers
             ViewData["DesignationId"] = new SelectList(_context.Designations, "Id", "Name", employee.DesignationId);
             ViewData["BankId"] = new SelectList(_context.Banks, "Id", "BankName", employee.BankId);
             ViewData["GenderId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "Gender"), "Id", "Description", employee.GenderId);
+            ViewData["ReasonForTerminationId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "ReasonForTermination"), "Id", "Description", employee.ReasonForTerminationId);
+            ViewData["EmploymentTermsId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "EmploymentTerms"), "Id", "Description", employee.EmploymentTermsId);
+            ViewData["EmployeeStatusId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "EmployeeStatus"), "Id", "Description", employee.EmployeeStatusId);
 
             return View(employee);
         }
@@ -112,6 +134,10 @@ namespace HRMS.Controllers
             ViewData["DesignationId"] = new SelectList(_context.Designations, "Id", "Name", employee.DesignationId);
             ViewData["BankId"] = new SelectList(_context.Banks, "Id", "BankName", employee.BankId);
             ViewData["GenderId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "Gender"), "Id", "Description", employee.GenderId);
+            ViewData["ReasonForTerminationId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "ReasonForTermination"), "Id", "Description", employee.ReasonForTerminationId);
+            ViewData["EmploymentTermsId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "EmploymentTerms"), "Id", "Description", employee.EmploymentTermsId);
+            ViewData["EmployeeStatusId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "EmployeeStatus"), "Id", "Description", employee.EmployeeStatusId);
+
 
             return View(employee);
 
@@ -157,6 +183,9 @@ namespace HRMS.Controllers
             ViewData["DesignationId"] = new SelectList(_context.Designations, "Id", "Name", employee.DesignationId);
             ViewData["BankId"] = new SelectList(_context.Banks, "Id", "BankName", employee.BankId);
             ViewData["GenderId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "Gender"), "Id", "Description", employee.GenderId);
+            ViewData["ReasonForTerminationId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "ReasonForTermination"), "Id", "Description", employee.ReasonForTerminationId);
+            ViewData["EmploymentTermsId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "EmploymentTerms"), "Id", "Description", employee.EmploymentTermsId);
+            ViewData["EmployeeStatusId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "EmployeeStatus"), "Id", "Description", employee.EmployeeStatusId);
 
             return View(employee);
         }
@@ -197,6 +226,29 @@ namespace HRMS.Controllers
         private bool EmployeeExists(int id)
         {
             return _context.Employees.Any(e => e.Id == id);
+        }
+        private string GetFileExtension(string contentType)
+        {
+            // Define a mapping between content types and file extensions
+            Dictionary<string, string> contentTypeMappings = new Dictionary<string, string>
+        {
+            {"image/jpeg", ".jpg"},
+            {"image/png", ".png"},
+            {"application/pdf", ".pdf"},
+            // Add more mappings as needed
+        };
+
+            // Check if the content type exists in the mapping
+            if (contentTypeMappings.ContainsKey(contentType))
+            {
+                // Return the associated file extension
+                return contentTypeMappings[contentType];
+            }
+            else
+            {
+                // If content type not found, return empty string or handle it accordingly
+                return string.Empty;
+            }
         }
     }
 }

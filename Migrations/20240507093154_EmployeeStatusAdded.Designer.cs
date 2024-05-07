@@ -3,6 +3,7 @@ using System;
 using HRMS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HRMS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240507093154_EmployeeStatusAdded")]
+    partial class EmployeeStatusAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -320,9 +323,6 @@ namespace HRMS.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<decimal?>("AllocatedLeaveDays")
-                        .HasColumnType("numeric");
-
                     b.Property<string>("BankAccountNumber")
                         .IsRequired()
                         .HasColumnType("text");
@@ -381,9 +381,6 @@ namespace HRMS.Migrations
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<decimal?>("LeaveOutStandingBalance")
-                        .HasColumnType("numeric");
 
                     b.Property<string>("MiddleName")
                         .HasColumnType("text");
@@ -465,45 +462,6 @@ namespace HRMS.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Holidays");
-                });
-
-            modelBuilder.Entity("HRMS.Models.LeaveAdjustmentEntry", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AdjustmentDescription")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("AdjustmentTypeId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("LeaveAdjustmentDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("LeaveEndDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("LeaveStartDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<decimal>("NoOfDays")
-                        .HasColumnType("numeric");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AdjustmentTypeId");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.ToTable("LeaveAdjustmentEntries");
                 });
 
             modelBuilder.Entity("HRMS.Models.LeaveApplication", b =>
@@ -962,25 +920,6 @@ namespace HRMS.Migrations
                     b.Navigation("Gender");
 
                     b.Navigation("ReasonForTermination");
-                });
-
-            modelBuilder.Entity("HRMS.Models.LeaveAdjustmentEntry", b =>
-                {
-                    b.HasOne("HRMS.Models.SystemCodeDetail", "AdjustmentType")
-                        .WithMany()
-                        .HasForeignKey("AdjustmentTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("HRMS.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("AdjustmentType");
-
-                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("HRMS.Models.LeaveApplication", b =>

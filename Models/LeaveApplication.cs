@@ -28,6 +28,6 @@ namespace HRMS.Models
         public int StatusId { get; set; }
         public SystemCodeDetail Status { get; set; }
         [Display(Name = "Approval Notes")]
-        public string ApprovalNotes { get; set; }
+        public string? ApprovalNotes { get; set; }
     }
 }

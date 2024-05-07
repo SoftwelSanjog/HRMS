@@ -207,14 +207,34 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="Employees" asp-action="Index" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-chart-pie"></i>
                                 <p>
-                                    Employees
+                                    HR & Payroll
+                                    <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-controller="Employees" asp-action="Index" class="nav-link">
+                                        <i class="nav-icon fas fa-users"></i>
+                                        <p>
+                                            Employees
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-controller="Holidays" asp-action="Index" class="nav-link">
+                                        <i class="nav-icon fa fa-hashtag"></i>
+                                        <p>
+                                            Holidays
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
-
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-chart-pie"></i>
@@ -250,7 +270,6 @@
                                 </li>
                             </ul>
                         </li>
-
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-cog"></i>
@@ -357,12 +376,12 @@
                                 </li>
                             </ul>
                             @* <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a asp-controller="Profiles" asp-action="Index" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>User Roles</p>
-                                    </a>
-                                </li>
+                            <li class="nav-item">
+                            <a asp-controller="Profiles" asp-action="Index" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>User Roles</p>
+                            </a>
+                            </li>
                             </ul> *@
                         </li>
 

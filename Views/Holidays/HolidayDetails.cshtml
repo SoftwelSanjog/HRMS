@@ -1,0 +1,45 @@
+﻿@model IEnumerable<HRMS.Models.Holiday>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title"><b>Holiday List</b></h1>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body table-responsive p-0" style="height: 300px;">
+        <table class="table table-head-fixed text-nowrap">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OrderId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.StartDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderId)
+                        </td>
+                        <td>
+                            @item.StartDate.ToString("dd MMMM yyyy")
+                            @* @Html.DisplayFor(modelItem => item.StartDate.ToString("yyyy MMMM dd")) *@
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

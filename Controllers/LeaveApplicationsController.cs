@@ -3,6 +3,7 @@ using HRMS.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace HRMS.Controllers
 {
@@ -99,6 +100,7 @@ namespace HRMS.Controllers
         public async Task<IActionResult> ApproveLeave(LeaveApplication leave)
         {
             var approvalStatus = _context.SystemCodeDetails.Include(x => x.SystemCode).Where(y => y.SystemCode.Code == "LeaveApprovalStatus" && y.Code == "Approved").FirstOrDefault();
+            var adjustmentType = _context.SystemCodeDetails.Include(x => x.SystemCode).Where(y => y.SystemCode.Code == "LeaveAdjustment" && y.Code == "Negative").FirstOrDefault();
 
             var leaveApplication = await _context.LeaveApplications
                .Include(l => l.Duration)
@@ -110,8 +112,8 @@ namespace HRMS.Controllers
             {
                 return NotFound();
             }
-
-            leaveApplication.ApprovedById = "Sanjog";
+            var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            leaveApplication.ApprovedById = UserId;
             leaveApplication.ApprovedOn = DateTime.Now;
             leaveApplication.StatusId = approvalStatus!.Id;
             leaveApplication.ApprovalNotes = leave.ApprovalNotes;
@@ -120,7 +122,26 @@ namespace HRMS.Controllers
             ViewData["LeaveTypeId"] = new SelectList(_context.LeaveTypes, "Id", "Name");
 
             _context.Update(leaveApplication);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(UserId);
+
+            var adjustment = new LeaveAdjustmentEntry
+            {
+                EmployeeId = leaveApplication.EmployeeId,
+                NoOfDays = leaveApplication.NoOfDays,
+                LeaveStartDate = leaveApplication.StartDate,
+                LeaveEndDate = leaveApplication.EndDate,
+                AdjustmentDescription = "Leave Taken - Negative Adjustment",
+                LeaveAdjustmentDate = DateTime.Now,
+                AdjustmentTypeId = adjustmentType.Id
+            };
+            _context.Add(adjustment);
+            await _context.SaveChangesAsync(UserId);
+
+            var employee = await _context.Employees.FindAsync(leaveApplication.EmployeeId);
+            employee.LeaveOutStandingBalance = employee.AllocatedLeaveDays - leaveApplication.NoOfDays;
+            _context.Update(employee);
+            await _context.SaveChangesAsync(UserId);
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -208,8 +229,8 @@ namespace HRMS.Controllers
             {
                 return NotFound();
             }
-
-            leaveApplication.ApprovedById = "Sanjog";
+            var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            leaveApplication.ApprovedById = UserId;
             leaveApplication.ApprovedOn = DateTime.Now;
             leaveApplication.StatusId = rejectStatus!.Id;
             leaveApplication.ApprovalNotes = leave.ApprovalNotes;
@@ -242,8 +263,10 @@ namespace HRMS.Controllers
             var pendingStatus = _context.SystemCodeDetails.Include(x => x.SystemCode).Where(y => y.Code == "AwaitingApproval" && y.SystemCode.Code == "LeaveApprovalStatus").FirstOrDefault();
             //    if (ModelState.IsValid)
             //    {
-            leaveApplication.CreatedById = "Sanjog";
+            var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            leaveApplication.CreatedById = UserId;
             leaveApplication.CreatedOn = DateTime.Now;
+
             leaveApplication.StatusId = pendingStatus.Id;
             ViewData["DurationId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(y => y.SystemCode.Code == "LeaveDuration"), "Id", "Description", leaveApplication.DurationId);
             ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "FullName", leaveApplication.EmployeeId);
@@ -293,7 +316,8 @@ namespace HRMS.Controllers
                 {
                     var pendingStatus = _context.SystemCodeDetails.Include(x => x.SystemCode).Where(y => y.Code == "AwaitingApproval" && y.SystemCode.Code == "LeaveApprovalStatus").FirstOrDefault();
 
-                    leaveApplication.ModifiedById = "Sanjog";
+                    var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    leaveApplication.ModifiedById = UserId;
                     leaveApplication.ModifiedOn = DateTime.Now;
                     leaveApplication.StatusId = pendingStatus!.Id;
 

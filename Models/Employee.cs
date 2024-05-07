@@ -42,11 +42,26 @@ namespace HRMS.Models
         public DateTime JoinDate { get; set; }
         [DisplayName("Contract End Date")]
         public DateTime ContractEndDate { get; set; }
-
-        public string ProfilePictureURL { get; set; }
+        [DisplayName("Photo")]
+        public string? ProfilePictureURL { get; set; }
         [DisplayName("Gender")]
         public int? GenderId { get; set; }
         public SystemCodeDetail Gender {  get; set; }
+        [DisplayName("Company Email")]
+        public string? CompanyEmail { get; set; }
+        [DisplayName("Reason For Termination")]
+        public int? ReasonForTerminationId { get; set; }
+        public SystemCodeDetail ReasonForTermination { get; set; }
+        [DisplayName("Employee Terms")]
+        public int? EmploymentTermsId { get; set; }
+        public SystemCodeDetail EmploymentTerms { get; set; }
+        [DisplayName("Status")]
+        public int? EmployeeStatusId { get; set; }
+        public SystemCodeDetail EmployeeStatus { get; set; }
+        [DisplayName("Allocated Leave")]
+        public Decimal? AllocatedLeaveDays { get; set; }
+        [DisplayName("Leave Balance")]
+        public Decimal? LeaveOutStandingBalance { get; set; }
 
     }
 }

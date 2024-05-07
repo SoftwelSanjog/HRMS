@@ -55,3 +55,12 @@ CREATE SEQUENCE public.AuditLogs_id_seq;
 ALTER TABLE public."AuditLogs"
 ALTER COLUMN "Id" SET DEFAULT nextval('public.AuditLogs_id_seq'::regclass);
 
+CREATE SEQUENCE public.Holidays_id_seq;
+ALTER TABLE public."Holidays"
+ALTER COLUMN "Id" SET DEFAULT nextval('public.Holidays_id_seq'::regclass);
+
+CREATE SEQUENCE public.LeaveAdjustmentEntries;
+ALTER TABLE public."LeaveAdjustmentEntries"
+ALTER COLUMN "Id" SET DEFAULT nextval('public.LeaveAdjustmentEntries_id_seq'::regclass);
+
+

@@ -11,22 +11,27 @@ using System.Security.Claims;
 
 namespace HRMS.Controllers
 {
-    public class SystemCodesController : Controller
+    public class HolidaysController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public SystemCodesController(ApplicationDbContext context)
+        public HolidaysController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: SystemCodes
+        // GET: Holidays
         public async Task<IActionResult> Index()
         {
-            return View(await _context.SystemCodes.ToListAsync());
+
+            return View(await _context.Holidays.OrderBy(i=>i.OrderId).ToListAsync());
+        }
+        public async Task<IActionResult> HolidayDetails()
+        {
+            return View(await _context.Holidays.OrderBy(i => i.OrderId).ToListAsync());
         }
 
-        // GET: SystemCodes/Details/5
+        // GET: Holidays/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,45 +39,52 @@ namespace HRMS.Controllers
                 return NotFound();
             }
 
-            var systemCode = await _context.SystemCodes
+            var holiday = await _context.Holidays
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (systemCode == null)
+            if (holiday == null)
             {
                 return NotFound();
             }
 
-            return View(systemCode);
+            return View(holiday);
         }
 
-        // GET: SystemCodes/Create
+        // GET: Holidays/Create
         public IActionResult Create()
         {
+
+            ViewBag.NextOrderId = GetNextOrderId();
             return View();
         }
 
-        // POST: SystemCodes/Create
+
+        private int GetNextOrderId()
+        {
+            var orderId = _context.Holidays.Max(x => x.OrderId);
+            return orderId + 1;
+        }
+
+        // POST: Holidays/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(SystemCode systemCode)
+        public async Task<IActionResult> Create(Holiday holiday)
         {
-       
-
             if (ModelState.IsValid)
             {
-                var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                systemCode.CreatedById = UserId;
-                systemCode.CreatedOn = DateTime.Now;
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                holiday.CreatedById = userId;
+                holiday.CreatedOn = DateTime.Now;
 
-                _context.Add(systemCode);
-                await _context.SaveChangesAsync(UserId);
+                _context.Add(holiday);
+                await _context.SaveChangesAsync(userId);
                 return RedirectToAction(nameof(Index));
             }
-            return View(systemCode);
+            return View(holiday);
         }
 
-        // GET: SystemCodes/Edit/5
+        // GET: Holidays/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,22 +92,22 @@ namespace HRMS.Controllers
                 return NotFound();
             }
 
-            var systemCode = await _context.SystemCodes.FindAsync(id);
-            if (systemCode == null)
+            var holiday = await _context.Holidays.FindAsync(id);
+            if (holiday == null)
             {
                 return NotFound();
             }
-            return View(systemCode);
+            return View(holiday);
         }
 
-        // POST: SystemCodes/Edit/5
+        // POST: Holidays/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, SystemCode systemCode)
+        public async Task<IActionResult> Edit(int id, Holiday holiday)
         {
-            if (id != systemCode.Id)
+            if (id != holiday.Id)
             {
                 return NotFound();
             }
@@ -104,16 +116,16 @@ namespace HRMS.Controllers
             {
                 try
                 {
-                    var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    systemCode.ModifiedById = UserId;
-                    systemCode.ModifiedOn = DateTime.Now;
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    holiday.ModifiedById = userId;
+                    holiday.ModifiedOn = DateTime.Now;  
 
-                    _context.Update(systemCode);
-                    await _context.SaveChangesAsync();
+                    _context.Update(holiday);
+                    await _context.SaveChangesAsync(userId);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SystemCodeExists(systemCode.Id))
+                    if (!HolidayExists(holiday.Id))
                     {
                         return NotFound();
                     }
@@ -124,10 +136,10 @@ namespace HRMS.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(systemCode);
+            return View(holiday);
         }
 
-        // GET: SystemCodes/Delete/5
+        // GET: Holidays/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,34 +147,34 @@ namespace HRMS.Controllers
                 return NotFound();
             }
 
-            var systemCode = await _context.SystemCodes
+            var holiday = await _context.Holidays
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (systemCode == null)
+            if (holiday == null)
             {
                 return NotFound();
             }
 
-            return View(systemCode);
+            return View(holiday);
         }
 
-        // POST: SystemCodes/Delete/5
+        // POST: Holidays/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var systemCode = await _context.SystemCodes.FindAsync(id);
-            if (systemCode != null)
+            var holiday = await _context.Holidays.FindAsync(id);
+            if (holiday != null)
             {
-                _context.SystemCodes.Remove(systemCode);
+                _context.Holidays.Remove(holiday);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool SystemCodeExists(int id)
+        private bool HolidayExists(int id)
         {
-            return _context.SystemCodes.Any(e => e.Id == id);
+            return _context.Holidays.Any(e => e.Id == id);
         }
     }
 }

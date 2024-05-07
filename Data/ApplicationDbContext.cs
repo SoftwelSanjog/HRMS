@@ -36,6 +36,8 @@ namespace HRMS.Data
         public DbSet<LeaveApplication> LeaveApplications { get; set; }
         public DbSet<Audit> AuditLogs { get; set; }
         public DbSet<RoleProfile> RoleProfiles { get; set; }
+        public DbSet<Holiday> Holidays { get; set; }
+        public DbSet<LeaveAdjustmentEntry> LeaveAdjustmentEntries { get; set; }
         public virtual async Task<int> SaveChangesAsync(string userId = null)
         {
             OnBeforeSavingChanges(userId);

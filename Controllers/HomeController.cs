@@ -21,6 +21,8 @@ namespace HRMS.Controllers
         {
             var empCount = _context.Employees.Count();
             ViewBag.EmployeeCount = empCount;
+            var HolidayCount = _context.Holidays.Count();
+            ViewBag.HolidayCount = HolidayCount;
 
             return !User.Identity.IsAuthenticated ? this.Redirect("~/identity/account/login") : View();
         }
