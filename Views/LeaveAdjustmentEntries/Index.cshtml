@@ -1,71 +1,73 @@
 ﻿@model IEnumerable<HRMS.Models.LeaveAdjustmentEntry>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Leave Adjustment";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Employee)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NoOfDays)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LeaveAdjustmentDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LeaveStartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LeaveEndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AdjustmentDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AdjustmentType)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Employee.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NoOfDays)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LeaveAdjustmentDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LeaveStartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LeaveEndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AdjustmentDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AdjustmentType.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title">Employees Leave Adjustment List</h1>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Employee)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.NoOfDays)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LeaveAdjustmentDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LeaveStartDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LeaveEndDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.AdjustmentDescription)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.AdjustmentType)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model) 
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Employee.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NoOfDays)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LeaveAdjustmentDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LeaveStartDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LeaveEndDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AdjustmentDescription)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AdjustmentType.Description)
+                        </td>
+                        <td>
+                            <a asp-action="Details" class="btn btn-warning" asp-route-id="@item.Id"><i class="fa fa-eye"></i>Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

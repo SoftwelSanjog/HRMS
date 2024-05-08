@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using HRMS.Data;
+﻿using HRMS.Data;
 using HRMS.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace HRMS.Controllers
@@ -24,7 +19,7 @@ namespace HRMS.Controllers
         public async Task<IActionResult> Index()
         {
 
-            return View(await _context.Holidays.OrderBy(i=>i.OrderId).ToListAsync());
+            return View(await _context.Holidays.OrderBy(i => i.OrderId).ToListAsync());
         }
         public async Task<IActionResult> HolidayDetails()
         {
@@ -60,7 +55,12 @@ namespace HRMS.Controllers
 
         private int GetNextOrderId()
         {
-            var orderId = _context.Holidays.Max(x => x.OrderId);
+            var count = _context.Holidays.Count();
+            var orderId = 0;
+            if (count > 0)
+            {
+                orderId = _context.Holidays.Max(x => x.OrderId);
+            }
             return orderId + 1;
         }
 
@@ -118,7 +118,7 @@ namespace HRMS.Controllers
                 {
                     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     holiday.ModifiedById = userId;
-                    holiday.ModifiedOn = DateTime.Now;  
+                    holiday.ModifiedOn = DateTime.Now;
 
                     _context.Update(holiday);
                     await _context.SaveChangesAsync(userId);

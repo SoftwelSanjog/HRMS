@@ -239,7 +239,7 @@ namespace HRMS.Controllers
             ViewData["LeaveTypeId"] = new SelectList(_context.LeaveTypes, "Id", "Name");
 
             _context.Update(leaveApplication);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(UserId);
             return RedirectToAction(nameof(Index));
         }
 
@@ -272,7 +272,7 @@ namespace HRMS.Controllers
             ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "FullName", leaveApplication.EmployeeId);
             ViewData["LeaveTypeId"] = new SelectList(_context.LeaveTypes, "Id", "Name", leaveApplication.LeaveTypeId);
             _context.Add(leaveApplication);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(UserId);
             return RedirectToAction(nameof(Index));
             // }
 

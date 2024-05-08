@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="~/AdminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="~/AdminLTE/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 </head>
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition sidebar-mini layout-fixed layout-footer-fixed">
     <div class="wrapper">
 
         <!-- Preloader -->
@@ -178,7 +178,7 @@
             <!-- Brand Logo -->
             <a asp-controller="Home" asp-action="index" class="brand-link">
                 <img src="~/AdminLTE/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-square elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light">HRIS-SIP</span>
+                <span class="brand-text font-weight-light">HR-MIS</span>
             </a>
 
             <!-- Sidebar -->
@@ -227,9 +227,29 @@
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a asp-controller="Holidays" asp-action="Index" class="nav-link">
-                                        <i class="nav-icon fa fa-hashtag"></i>
+                                        <i class="nav-icon far fa-circle"></i>
                                         <p>
                                             Holidays
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-controller="LeaveAdjustmentEntries" asp-action="Index" class="nav-link">
+                                        <i class="nav-icon far fa-circle"></i>
+                                        <p>
+                                            Leave Adjustments
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-controller="Holidays" asp-action="Index" class="nav-link">
+                                        <i class="nav-icon far fa-circle"></i>
+                                        <p>
+                                            Leave Balance
                                         </p>
                                     </a>
                                 </li>

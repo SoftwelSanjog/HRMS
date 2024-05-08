@@ -6,8 +6,8 @@ namespace HRMS.Models
     public class Employee : UserActivity
     {
         [Key]
-        public int Id { get; set; } 
-        [DisplayName("Employee ID")]     
+        public int Id { get; set; }
+        [DisplayName("Employee ID")]
         public string EmpId { get; set; }
         [DisplayName("First Name")]
         public string FirstName { get; set; }
@@ -46,7 +46,7 @@ namespace HRMS.Models
         public string? ProfilePictureURL { get; set; }
         [DisplayName("Gender")]
         public int? GenderId { get; set; }
-        public SystemCodeDetail Gender {  get; set; }
+        public SystemCodeDetail Gender { get; set; }
         [DisplayName("Company Email")]
         public string? CompanyEmail { get; set; }
         [DisplayName("Reason For Termination")]
