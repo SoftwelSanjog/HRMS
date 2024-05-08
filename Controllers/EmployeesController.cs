@@ -1,5 +1,7 @@
-﻿using HRMS.Data;
+﻿using AutoMapper;
+using HRMS.Data;
 using HRMS.Models;
+using HRMS.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,23 +13,53 @@ namespace HRMS.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
-        public EmployeesController(IConfiguration configuration, ApplicationDbContext context)
+        private readonly IMapper _mapper;
+        public EmployeesController(IMapper mapper,IConfiguration configuration, ApplicationDbContext context)
         {
+            _mapper = mapper;
             _configuration = configuration;
             _context = context;
         }
 
         // GET: Employees
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(EmployeeViewModel employees)
         {
-            var model = await _context.Employees
-                .Include(c => c.Cluster)
-                .Include(c => c.Bank)
-                .Include(c => c.Designation)
-                .Include(c => c.EmployeeStatus)
-                .ToListAsync();
+            //employees.Employees = await _context.Employees
+            //    .Include(c => c.Cluster)
+            //    .Include(c => c.Bank)
+            //    .Include(c => c.Designation)
+            //    .Include(c => c.EmployeeStatus)
+            //    .ToListAsync();
 
-            return View(model);
+            var rawdata = _context.Employees
+               .Include(c => c.Cluster)
+               .Include(c => c.Bank)
+               .Include(c => c.Designation)
+               .Include(c => c.EmployeeStatus)
+               .AsQueryable();
+            if ((!string.IsNullOrEmpty(employees.EmpId)))
+            {
+                rawdata = rawdata.Where(x => x.EmpId == employees.EmpId);
+            }
+            if ((!string.IsNullOrEmpty(employees.FirstName)))
+            {
+                rawdata = rawdata.Where(x => x.FirstName.Contains(employees.FirstName));
+            }
+            if ((!string.IsNullOrEmpty(employees.PhoneNumber)))
+            {
+                rawdata = rawdata.Where(x => x.PhoneNumber == employees.PhoneNumber);
+            }
+            employees.Employees = await rawdata.ToListAsync();
+            return View(employees);
+
+            //var model = await _context.Employees
+            //    .Include(c => c.Cluster)
+            //    .Include(c => c.Bank)
+            //    .Include(c => c.Designation)
+            //    .Include(c => c.EmployeeStatus)
+            //    .ToListAsync();
+
+            //return View(model);
         }
 
         public async Task<IActionResult> EmployeeGrid()
@@ -76,8 +108,12 @@ namespace HRMS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Employee employee, IFormFile employeephoto)
+        //public async Task<IActionResult> Create(Employee employee, IFormFile employeephoto)
+        public async Task<IActionResult> Create(EmployeeViewModel newemployee, IFormFile employeephoto)
         {
+            var employee = new Employee();
+            _mapper.Map(newemployee, employee);
+
             if (employeephoto != null)
             {
                 var filename = $"{employee.EmpId}_{DateTime.Now.ToString("yyyyMMddHHmmss")}{GetFileExtension(employeephoto.ContentType)}";

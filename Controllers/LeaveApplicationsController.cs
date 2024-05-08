@@ -1,5 +1,6 @@
 ﻿using HRMS.Data;
 using HRMS.Models;
+using HRMS.Views.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,9 +11,11 @@ namespace HRMS.Controllers
     public class LeaveApplicationsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IConfiguration _configuration;
 
-        public LeaveApplicationsController(ApplicationDbContext context)
+        public LeaveApplicationsController(IConfiguration configuration, ApplicationDbContext context)
         {
+            _configuration = configuration;
             _context = context;
         }
 
@@ -130,6 +133,7 @@ namespace HRMS.Controllers
                 NoOfDays = leaveApplication.NoOfDays,
                 LeaveStartDate = leaveApplication.StartDate,
                 LeaveEndDate = leaveApplication.EndDate,
+                LeavePeriodId = 1,
                 AdjustmentDescription = "Leave Taken - Negative Adjustment",
                 LeaveAdjustmentDate = DateTime.Now,
                 AdjustmentTypeId = adjustmentType.Id
@@ -258,8 +262,18 @@ namespace HRMS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(LeaveApplication leaveApplication)
+        public async Task<IActionResult> Create(LeaveApplication leaveApplication, IFormFile attachment)
         {
+            if (attachment != null)
+            {
+                var filename = $"LeaveAttachment_{DateTime.Now.ToString("yyyyMMddHHmmss")}{Generic.GetFileExtension(attachment.ContentType)}";
+                var path = _configuration["FileSettings:UploadFolder"]!;
+                var filepath = Path.Combine(path, filename);
+                var stream = new FileStream(filepath, FileMode.Create);
+                await attachment.CopyToAsync(stream);
+                leaveApplication.Attachment = filepath;
+            }
+
             var pendingStatus = _context.SystemCodeDetails.Include(x => x.SystemCode).Where(y => y.Code == "AwaitingApproval" && y.SystemCode.Code == "LeaveApprovalStatus").FirstOrDefault();
             //    if (ModelState.IsValid)
             //    {

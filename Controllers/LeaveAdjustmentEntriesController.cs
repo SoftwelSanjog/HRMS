@@ -45,11 +45,10 @@ namespace HRMS.Controllers
         // GET: LeaveAdjustmentEntries/Create
         public IActionResult Create()
         {
-            ViewData["AdjustmentTypeId"] = new SelectList(_context.SystemCodeDetails, "Id", "Description");
+            ViewData["AdjustmentTypeId"] = new SelectList(_context.SystemCodeDetails.Include(x=>x.SystemCode).Where(x=>x.SystemCode.Code== "LeaveAdjustment"), "Id", "Description");
             ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "FullName");
             return View();
         }
-
         // POST: LeaveAdjustmentEntries/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -57,15 +56,14 @@ namespace HRMS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(LeaveAdjustmentEntry leaveAdjustmentEntry)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(leaveAdjustmentEntry);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
             ViewData["AdjustmentTypeId"] = new SelectList(_context.SystemCodeDetails, "Id", "Description", leaveAdjustmentEntry.AdjustmentTypeId);
             ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "FullName", leaveAdjustmentEntry.EmployeeId);
-            return View(leaveAdjustmentEntry);
+
+            _context.Add(leaveAdjustmentEntry);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+     
+            //return View(leaveAdjustmentEntry);
         }
 
         // GET: LeaveAdjustmentEntries/Edit/5

@@ -3,6 +3,7 @@ using System;
 using HRMS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HRMS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240508054000_LeaveAdjustmentTrack")]
+    partial class LeaveAdjustmentTrack
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -497,8 +500,9 @@ namespace HRMS.Migrations
                     b.Property<DateTime?>("LeaveEndDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("LeavePeriodId")
-                        .HasColumnType("integer");
+                    b.Property<string>("LeavePeriod")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("LeaveStartDate")
                         .HasColumnType("timestamp with time zone");
@@ -517,8 +521,6 @@ namespace HRMS.Migrations
                     b.HasIndex("AdjustmentTypeId");
 
                     b.HasIndex("EmployeeId");
-
-                    b.HasIndex("LeavePeriodId");
 
                     b.ToTable("LeaveAdjustmentEntries");
                 });
@@ -591,51 +593,6 @@ namespace HRMS.Migrations
                     b.HasIndex("StatusId");
 
                     b.ToTable("LeaveApplications");
-                });
-
-            modelBuilder.Entity("HRMS.Models.LeavePeriod", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Closed")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("CreatedById")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("Locked")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("ModifiedById")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("LeavePeriods");
                 });
 
             modelBuilder.Entity("HRMS.Models.LeaveType", b =>
@@ -1040,16 +997,9 @@ namespace HRMS.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("HRMS.Models.LeavePeriod", "LeavePeriod")
-                        .WithMany()
-                        .HasForeignKey("LeavePeriodId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.Navigation("AdjustmentType");
 
                     b.Navigation("Employee");
-
-                    b.Navigation("LeavePeriod");
                 });
 
             modelBuilder.Entity("HRMS.Models.LeaveApplication", b =>

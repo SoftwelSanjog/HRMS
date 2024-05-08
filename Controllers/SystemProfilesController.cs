@@ -3,6 +3,7 @@ using HRMS.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace HRMS.Controllers
 {
@@ -58,11 +59,12 @@ namespace HRMS.Controllers
             //if (ModelState.IsValid)
             //{
             ViewData["ProfileId"] = new SelectList(_context.SystemProfiles, "Id", "Name", systemProfile.ProfileId);
+            var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            systemProfile.CreatedById = "Sanjog";
+            systemProfile.CreatedById = UserId;
             systemProfile.CreatedOn = DateTime.Now;
             _context.Add(systemProfile);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(UserId);
             return RedirectToAction(nameof(Index));
             // }
             //return View(systemProfile);
@@ -97,12 +99,15 @@ namespace HRMS.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
+            //if (ModelState.IsValid)
+            //{
                 try
                 {
+                    var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    systemProfile.ModifiedById = UserId;
+                    systemProfile.ModifiedOn = DateTime.Now;
                     _context.Update(systemProfile);
-                    await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync(UserId);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -116,7 +121,7 @@ namespace HRMS.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
-            }
+           // }
             ViewData["ProfileId"] = new SelectList(_context.SystemProfiles, "Id", "Name", systemProfile.ProfileId);
             return View(systemProfile);
         }

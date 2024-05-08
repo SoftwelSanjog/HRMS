@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Leave Adjustment";
 }
-
 <div class="card">
     <div class="card-header">
         <h1 class="card-title">Employees Leave Adjustment List</h1>
@@ -14,7 +13,10 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Employee)
+                        @Html.DisplayNameFor(model => model.EmployeeId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LeavePeriod)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.NoOfDays)
@@ -22,13 +24,7 @@
                     <th>
                         @Html.DisplayNameFor(model => model.LeaveAdjustmentDate)
                     </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.LeaveStartDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.LeaveEndDate)
-                    </th>
-                    <th>
+                           <th>
                         @Html.DisplayNameFor(model => model.AdjustmentDescription)
                     </th>
                     <th>
@@ -45,18 +41,15 @@
                             @Html.DisplayFor(modelItem => item.Employee.FullName)
                         </td>
                         <td>
+                            @Html.DisplayFor(modelItem => item.LeavePeriod)
+                        </td>
+                        <td>
                             @Html.DisplayFor(modelItem => item.NoOfDays)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.LeaveAdjustmentDate)
                         </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LeaveStartDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LeaveEndDate)
-                        </td>
-                        <td>
+                         <td>
                             @Html.DisplayFor(modelItem => item.AdjustmentDescription)
                         </td>
                         <td>

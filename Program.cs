@@ -1,5 +1,6 @@
 using HRMS.Data;
 using HRMS.Models;
+using HRMS.Profiles;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,16 @@ builder.Services.AddRazorPages()
 // Authentication and authorization during login
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication();
+var config = new AutoMapper.MapperConfiguration(
+    options =>
+    {
+        options.AllowNullDestinationValues = true;
+        options.AllowNullCollections = true;
+        options.AddProfile(new AutomapperProfiles());
+    });
+var mapper = config.CreateMapper();
+builder.Services.AddSingleton(mapper);
+
 //builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 var app = builder.Build();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

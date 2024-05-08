@@ -1,33 +1,32 @@
-﻿using HRMS.Data;
-using HRMS.Models;
-using HRMS.ViewModels;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using HRMS.Data;
+using HRMS.Models;
 using System.Security.Claims;
 
 namespace HRMS.Controllers
 {
-    public class HolidaysController : Controller
+    public class LeavePeriodsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public HolidaysController(ApplicationDbContext context)
+        public LeavePeriodsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Holidays
+        // GET: LeavePeriods
         public async Task<IActionResult> Index()
         {
-
-            return View(await _context.Holidays.OrderBy(i => i.OrderId).ToListAsync());
-        }
-        public async Task<IActionResult> HolidayDetails()
-        {
-            return View(await _context.Holidays.OrderBy(i => i.OrderId).ToListAsync());
+            return View(await _context.LeavePeriods.ToListAsync());
         }
 
-        // GET: Holidays/Details/5
+        // GET: LeavePeriods/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -35,57 +34,42 @@ namespace HRMS.Controllers
                 return NotFound();
             }
 
-            var holiday = await _context.Holidays
+            var leavePeriod = await _context.LeavePeriods
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (holiday == null)
+            if (leavePeriod == null)
             {
                 return NotFound();
             }
 
-            return View(holiday);
+            return View(leavePeriod);
         }
 
-        // GET: Holidays/Create
+        // GET: LeavePeriods/Create
         public IActionResult Create()
         {
-
-            ViewBag.NextOrderId = GetNextOrderId();
             return View();
         }
 
-
-        private int GetNextOrderId()
-        {
-            var count = _context.Holidays.Count();
-            var orderId = 0;
-            if (count > 0)
-            {
-                orderId = _context.Holidays.Max(x => x.OrderId);
-            }
-            return orderId + 1;
-        }
-
-        // POST: Holidays/Create
+        // POST: LeavePeriods/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Holiday holiday)
+        public async Task<IActionResult> Create(LeavePeriod leavePeriod)
         {
             if (ModelState.IsValid)
             {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                holiday.CreatedById = userId;
-                holiday.CreatedOn = DateTime.Now;
-
-                _context.Add(holiday);
-                await _context.SaveChangesAsync(userId);
+                var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                leavePeriod.CreatedById = UserId;
+                leavePeriod.CreatedOn = DateTime.Now;
+                _context.Add(leavePeriod);
+                await _context.SaveChangesAsync(UserId);
                 return RedirectToAction(nameof(Index));
             }
-            return View(holiday);
+            return View(leavePeriod);
         }
 
-        // GET: Holidays/Edit/5
+        // GET: LeavePeriods/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -93,22 +77,22 @@ namespace HRMS.Controllers
                 return NotFound();
             }
 
-            var holiday = await _context.Holidays.FindAsync(id);
-            if (holiday == null)
+            var leavePeriod = await _context.LeavePeriods.FindAsync(id);
+            if (leavePeriod == null)
             {
                 return NotFound();
             }
-            return View(holiday);
+            return View(leavePeriod);
         }
 
-        // POST: Holidays/Edit/5
+        // POST: LeavePeriods/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Holiday holiday)
+        public async Task<IActionResult> Edit(int id, LeavePeriod leavePeriod)
         {
-            if (id != holiday.Id)
+            if (id != leavePeriod.Id)
             {
                 return NotFound();
             }
@@ -117,16 +101,12 @@ namespace HRMS.Controllers
             {
                 try
                 {
-                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    holiday.ModifiedById = userId;
-                    holiday.ModifiedOn = DateTime.Now;
-
-                    _context.Update(holiday);
-                    await _context.SaveChangesAsync(userId);
+                    _context.Update(leavePeriod);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!HolidayExists(holiday.Id))
+                    if (!LeavePeriodExists(leavePeriod.Id))
                     {
                         return NotFound();
                     }
@@ -137,10 +117,10 @@ namespace HRMS.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(holiday);
+            return View(leavePeriod);
         }
 
-        // GET: Holidays/Delete/5
+        // GET: LeavePeriods/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -148,34 +128,34 @@ namespace HRMS.Controllers
                 return NotFound();
             }
 
-            var holiday = await _context.Holidays
+            var leavePeriod = await _context.LeavePeriods
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (holiday == null)
+            if (leavePeriod == null)
             {
                 return NotFound();
             }
 
-            return View(holiday);
+            return View(leavePeriod);
         }
 
-        // POST: Holidays/Delete/5
+        // POST: LeavePeriods/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var holiday = await _context.Holidays.FindAsync(id);
-            if (holiday != null)
+            var leavePeriod = await _context.LeavePeriods.FindAsync(id);
+            if (leavePeriod != null)
             {
-                _context.Holidays.Remove(holiday);
+                _context.LeavePeriods.Remove(leavePeriod);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool HolidayExists(int id)
+        private bool LeavePeriodExists(int id)
         {
-            return _context.Holidays.Any(e => e.Id == id);
+            return _context.LeavePeriods.Any(e => e.Id == id);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿@model HRMS.Models.Employee
+﻿@* @model HRMS.Models.Employee *@
+@model HRMS.ViewModels.EmployeeViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -74,7 +75,6 @@
                     <div class="form-group">
                         <label asp-for="CountryId" class="control-label"></label>
                         <select asp-for="CountryId" class="form-control" asp-items="ViewBag.CountryId"></select>
-                        <span asp-validation-for="Country" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -95,7 +95,6 @@
                     <div class="form-group">
                         <label asp-for="ClusterId" class="control-label"></label>
                         <select asp-for="ClusterId" class="form-control" asp-items="ViewBag.ClusterId"></select>
-                        <span asp-validation-for="Cluster" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -103,7 +102,6 @@
                     <div class="form-group">
                         <label asp-for="DesignationId" class="control-label"></label>
                         <select asp-for="DesignationId" class="form-control" asp-items="ViewBag.DesignationId"></select>
-                        <span asp-validation-for="Designation" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6">

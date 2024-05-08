@@ -1,0 +1,58 @@
+﻿@model IEnumerable<HRMS.Models.Employee>
+
+@{
+    ViewData["Title"] = "Leave Balances";
+}
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title">Employees List</h1>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Employee ID
+                    </th>
+                    <th>
+                        Employee Name
+                    </th>
+                    <th>
+                        Allocated Leave Days
+                    </th>
+                    <th>
+                       Leave Balance
+                    </th>
+                    @* <th>View</th> *@
+                    <th>Adjust</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EmpId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AllocatedLeaveDays)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LeaveOutStandingBalance)
+                        </td>
+             @*            <td>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-warning"><i class="fa fa-eye"></i> View</a>
+                        </td> *@
+                        <td>
+                            <a asp-action="AdjustLeaveBalance" asp-route-id="@item.Id" class="btn btn-primary"><i class="fa fa-lock"></i> Adjust</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

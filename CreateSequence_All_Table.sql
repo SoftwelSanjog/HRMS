@@ -63,4 +63,9 @@ CREATE SEQUENCE public.LeaveAdjustmentEntries_id_seq;
 ALTER TABLE public."LeaveAdjustmentEntries"
 ALTER COLUMN "Id" SET DEFAULT nextval('public.LeaveAdjustmentEntries_id_seq'::regclass);
 
+CREATE SEQUENCE public.LeavePeriods_id_seq;
+ALTER TABLE public."LeavePeriods"
+ALTER COLUMN "Id" SET DEFAULT nextval('public.LeavePeriods_id_seq'::regclass);
+
+
 
