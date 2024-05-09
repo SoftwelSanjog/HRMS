@@ -1,14 +1,14 @@
-﻿@model IEnumerable<HRMS.Models.SystemProfile>
+﻿@model IEnumerable<HRMS.Models.WorkFlowUserGroupMember>
 
 @{
     ViewData["Title"] = "Index";
 }
 <p>
-    <a class="btn btn-primary" asp-action="Create"><i class="fa fa-plus"></i>Add New Profile</a>
+    <a class="btn btn-primary" asp-action="Create"><i class="fa fa-plus"></i> Add New User Group Members</a>
 </p>
 <div class="card">
     <div class="card-header">
-        <h1 class="card-title">System Profile List</h1>
+        <h1 class="card-title">User Group Member List</h1>
     </div>
     <!-- /.card-header -->
     <div class="card-body">
@@ -16,13 +16,16 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Name)
+                        @Html.DisplayNameFor(model => model.WorkFlowUserGroup)
+                    </th>
+                     <th>
+                        @Html.DisplayNameFor(model => model.Sender)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Profile)
+                        @Html.DisplayNameFor(model => model.Approver)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Order)
+                        @Html.DisplayNameFor(model => model.SequenceNo)
                     </th>
                     <th>Edit</th>
                     <th>View</th>
@@ -34,15 +37,16 @@
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Name)
+                            @Html.DisplayFor(modelItem => item.WorkFlowUserGroup.Description)
+                        </td>
+                            <td>
+                            @Html.DisplayFor(modelItem => item.Sender.FullName)
                         </td>
                         <td>
-                            @if(item.Profile != null){
-                            @Html.DisplayFor(modelItem => item.Profile.Name) 
-                            }
+                            @Html.DisplayFor(modelItem => item.Approver.FullName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Order)
+                            @Html.DisplayFor(modelItem => item.SequenceNo)
                         </td>
                         <td>
                             <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary"><i class="fas fa-pencil-alt"></i> Edit</a>

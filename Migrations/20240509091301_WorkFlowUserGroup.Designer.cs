@@ -3,6 +3,7 @@ using System;
 using HRMS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HRMS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240509091301_WorkFlowUserGroup")]
+    partial class WorkFlowUserGroup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -865,9 +868,6 @@ namespace HRMS.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ClusterId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasColumnType("text");
@@ -876,14 +876,7 @@ namespace HRMS.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("DocumentTypeId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ClusterId");
-
-                    b.HasIndex("DocumentTypeId");
 
                     b.ToTable("WorkFlowUserGroups");
                 });
@@ -1279,23 +1272,6 @@ namespace HRMS.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Profile");
-                });
-
-            modelBuilder.Entity("HRMS.Models.WorkFlowUserGroup", b =>
-                {
-                    b.HasOne("HRMS.Models.Cluster", "Cluster")
-                        .WithMany()
-                        .HasForeignKey("ClusterId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("HRMS.Models.SystemCodeDetail", "DocumentType")
-                        .WithMany()
-                        .HasForeignKey("DocumentTypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Cluster");
-
-                    b.Navigation("DocumentType");
                 });
 
             modelBuilder.Entity("HRMS.Models.WorkFlowUserGroupMember", b =>

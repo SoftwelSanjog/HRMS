@@ -3,6 +3,7 @@ using System;
 using HRMS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HRMS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240509085054_ApprovalEntries")]
+    partial class ApprovalEntries
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -857,74 +860,6 @@ namespace HRMS.Migrations
                     b.ToTable("SystemProfiles");
                 });
 
-            modelBuilder.Entity("HRMS.Models.WorkFlowUserGroup", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ClusterId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int?>("DocumentTypeId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClusterId");
-
-                    b.HasIndex("DocumentTypeId");
-
-                    b.ToTable("WorkFlowUserGroups");
-                });
-
-            modelBuilder.Entity("HRMS.Models.WorkFlowUserGroupMember", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ApproverId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("SenderId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("SequenceNo")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("WorkFlowUserGroupId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApproverId");
-
-                    b.HasIndex("SenderId");
-
-                    b.HasIndex("WorkFlowUserGroupId");
-
-                    b.ToTable("WorkFlowUserGroupMembers");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -1279,50 +1214,6 @@ namespace HRMS.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Profile");
-                });
-
-            modelBuilder.Entity("HRMS.Models.WorkFlowUserGroup", b =>
-                {
-                    b.HasOne("HRMS.Models.Cluster", "Cluster")
-                        .WithMany()
-                        .HasForeignKey("ClusterId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("HRMS.Models.SystemCodeDetail", "DocumentType")
-                        .WithMany()
-                        .HasForeignKey("DocumentTypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Cluster");
-
-                    b.Navigation("DocumentType");
-                });
-
-            modelBuilder.Entity("HRMS.Models.WorkFlowUserGroupMember", b =>
-                {
-                    b.HasOne("HRMS.Models.ApplicationUser", "Approver")
-                        .WithMany()
-                        .HasForeignKey("ApproverId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("HRMS.Models.ApplicationUser", "Sender")
-                        .WithMany()
-                        .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("HRMS.Models.WorkFlowUserGroup", "WorkFlowUserGroup")
-                        .WithMany()
-                        .HasForeignKey("WorkFlowUserGroupId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Approver");
-
-                    b.Navigation("Sender");
-
-                    b.Navigation("WorkFlowUserGroup");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

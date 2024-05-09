@@ -68,4 +68,14 @@ ALTER TABLE public."LeavePeriods"
 ALTER COLUMN "Id" SET DEFAULT nextval('public.LeavePeriods_id_seq'::regclass);
 
 
+CREATE SEQUENCE public.ApprovalEntries_id_seq;
+ALTER TABLE public."ApprovalEntries"
+ALTER COLUMN "Id" SET DEFAULT nextval('public.ApprovalEntries_id_seq'::regclass);
 
+CREATE SEQUENCE public.WorkFlowUserGroups_id_seq;
+ALTER TABLE public."WorkFlowUserGroups"
+ALTER COLUMN "Id" SET DEFAULT nextval('public.WorkFlowUserGroups_id_seq'::regclass);
+
+CREATE SEQUENCE public.WorkFlowUserGroupMembers_id_seq;
+ALTER TABLE public."WorkFlowUserGroupMembers"
+ALTER COLUMN "Id" SET DEFAULT nextval('public.WorkFlowUserGroupMembers_id_seq'::regclass);

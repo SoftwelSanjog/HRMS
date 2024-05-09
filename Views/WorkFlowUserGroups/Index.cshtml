@@ -1,0 +1,73 @@
+﻿@model IEnumerable<HRMS.Models.WorkFlowUserGroup>
+
+@{
+    ViewData["Title"] = "Workflow User Groups";
+}
+<p>
+    <a class="btn btn-primary" asp-action="Create"><i class="fa fa-plus"></i> Add New Workflow User Group</a>
+</p>
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title">Workflow User List</h1>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Code)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ClusterId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DocumentTypeId)
+                    </th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Code)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Cluster.ClusterName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DocumentType.Description)
+                        </td>
+                        <td>
+                            <div class="input-group input-group-lg">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
+                                        Action
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li class="dropdown-divider"></li>
+                                        <li class="dropdown-item"><a class="btn btn-success" asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-pencil-alt"></i> Edit</a></li>
+                                        <li class="dropdown-divider"></li>
+                                        <li class="dropdown-item">  <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-eye"></i> Details</a></li>
+                                        <li class="dropdown-divider"></li>
+                                        <li class="dropdown-item"><a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-trash"></i> Delete</a></li>
+                                        <li class="dropdown-divider"></li>
+                                        <li class="dropdown-item"><a class="btn btn-warning" asp-action="Index" asp-controller="WorkFlowUserGroupMembers" asp-route-id="@item.Id"><i class="fa fa-lock"></i> Assign Approver</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
