@@ -3,6 +3,7 @@ using System;
 using HRMS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HRMS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240509144951_WorkFlowUserGroupRevised")]
+    partial class WorkFlowUserGroupRevised
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,50 +170,6 @@ namespace HRMS.Migrations
                     b.HasIndex("StatusId");
 
                     b.ToTable("ApprovalEntries");
-                });
-
-            modelBuilder.Entity("HRMS.Models.ApprovalUserMatrix", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("CreatedById")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("DocumentTypeId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ModifiedById")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("WorkFlowUserGroupId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DocumentTypeId");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("WorkFlowUserGroupId");
-
-                    b.ToTable("ApprovalUserMatrixs");
                 });
 
             modelBuilder.Entity("HRMS.Models.Audit", b =>
@@ -1147,33 +1106,6 @@ namespace HRMS.Migrations
                     b.Navigation("LastModifiedBy");
 
                     b.Navigation("Status");
-                });
-
-            modelBuilder.Entity("HRMS.Models.ApprovalUserMatrix", b =>
-                {
-                    b.HasOne("HRMS.Models.SystemCodeDetail", "DocumentType")
-                        .WithMany()
-                        .HasForeignKey("DocumentTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("HRMS.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("HRMS.Models.WorkFlowUserGroup", "WorkFlowUserGroup")
-                        .WithMany()
-                        .HasForeignKey("WorkFlowUserGroupId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("DocumentType");
-
-                    b.Navigation("User");
-
-                    b.Navigation("WorkFlowUserGroup");
                 });
 
             modelBuilder.Entity("HRMS.Models.City", b =>

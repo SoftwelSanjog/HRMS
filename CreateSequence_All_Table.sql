@@ -79,3 +79,8 @@ ALTER COLUMN "Id" SET DEFAULT nextval('public.WorkFlowUserGroups_id_seq'::regcla
 CREATE SEQUENCE public.WorkFlowUserGroupMembers_id_seq;
 ALTER TABLE public."WorkFlowUserGroupMembers"
 ALTER COLUMN "Id" SET DEFAULT nextval('public.WorkFlowUserGroupMembers_id_seq'::regclass);
+ApprovalUserMatrixs
+
+CREATE SEQUENCE public.ApprovalUserMatrixs_id_seq;
+ALTER TABLE public."ApprovalUserMatrixs"
+ALTER COLUMN "Id" SET DEFAULT nextval('public.ApprovalUserMatrixs_id_seq'::regclass);

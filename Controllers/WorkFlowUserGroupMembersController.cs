@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using HRMS.Data;
+using HRMS.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using HRMS.Data;
-using HRMS.Models;
 using System.Security.Claims;
 
 namespace HRMS.Controllers
@@ -23,7 +19,7 @@ namespace HRMS.Controllers
         // GET: WorkFlowUserGroupMembers
         public async Task<IActionResult> Index(int? id)
         {
-            var members = await _context.WorkFlowUserGroupMembers.Where(x=>x.WorkFlowUserGroup.Id==id).Include(w => w.Approver).Include(w => w.Sender).Include(w => w.WorkFlowUserGroup).ToListAsync();
+            var members = await _context.WorkFlowUserGroupMembers.Where(x => x.WorkFlowUserGroup.Id == id).Include(w => w.Approver).Include(w => w.Sender).Include(w => w.WorkFlowUserGroup).ToListAsync();
             return View(members);
         }
 
@@ -64,13 +60,13 @@ namespace HRMS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(WorkFlowUserGroupMember workFlowUserGroupMember)
         {
-         
-                var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                _context.Add(workFlowUserGroupMember);
-                await _context.SaveChangesAsync(UserId);
-                return RedirectToAction(nameof(Index));
 
-                    ViewData["ApproverId"] = new SelectList(_context.Users, "Id", "FullName", workFlowUserGroupMember.ApproverId);
+            var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            _context.Add(workFlowUserGroupMember);
+            await _context.SaveChangesAsync(UserId);
+            return RedirectToAction(nameof(Index));
+
+            ViewData["ApproverId"] = new SelectList(_context.Users, "Id", "FullName", workFlowUserGroupMember.ApproverId);
             ViewData["SenderId"] = new SelectList(_context.Users, "Id", "FullName", workFlowUserGroupMember.SenderId);
             ViewData["WorkFlowUserGroupId"] = new SelectList(_context.WorkFlowUserGroups, "Id", "Description", workFlowUserGroupMember.WorkFlowUserGroupId);
             return View(workFlowUserGroupMember);
