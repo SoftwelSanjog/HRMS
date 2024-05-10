@@ -6,7 +6,7 @@ namespace HRMS.Models
     {
 
         public int Id { get; set; }
-        [DisplayName("Application User Name")]
+        [DisplayName("Full Name")]
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
         [DisplayName("Document Type")]
