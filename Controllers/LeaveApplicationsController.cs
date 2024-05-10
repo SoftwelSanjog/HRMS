@@ -287,10 +287,41 @@ namespace HRMS.Controllers
             ViewData["LeaveTypeId"] = new SelectList(_context.LeaveTypes, "Id", "Name", leaveApplication.LeaveTypeId);
             _context.Add(leaveApplication);
             await _context.SaveChangesAsync(UserId);
-            return RedirectToAction(nameof(Index));
+
             // }
 
+            //Leave Type
+            var documentType = await _context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code=="DocumentTypes" && x.Code=="LeaveApplication").FirstOrDefaultAsync();
+            
+            //workflow UserGroup
+            var usergroup = await _context.ApprovalUserMatrixs.Where(x=>x.UserId == UserId && x.DocumentTypeId== documentType.Id && x.Active == true).FirstOrDefaultAsync();
+            //Approvers
+            var approvers = await _context.WorkFlowUserGroupMembers.Where(x=>x.WorkFlowUserGroupId == usergroup.WorkFlowUserGroupId && x.SenderId == UserId).ToListAsync();
 
+            var awaitingapproval = _context.SystemCodeDetails.Include(x => x.SystemCode).Where(y => y.Code == "AwaitingApproval" && y.SystemCode.Code == "LeaveApprovalStatus").FirstOrDefault();
+
+            foreach (var approver in approvers)
+            {
+                //Generate Approval Entry
+                var approvalentries = new ApprovalEntry()
+                {
+                    ApproverId = approver.ApproverId,
+                    DateSentForApproval = DateTime.Now,
+                    LastModifiedOn = DateTime.Now,
+                    LastModifiedById= approver.SenderId,
+                    RecordId = leaveApplication.Id,
+                    DocumentTypeId = documentType.Id,
+                    SequenceNo = approver.SequenceNo,
+                    StatusId = awaitingapproval.Id,
+                    Comments = "Sent for Approval"
+                
+                };
+                _context.Add(approvalentries) ;
+                await _context.SaveChangesAsync(UserId);
+            }
+
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: LeaveApplications/Edit/5
